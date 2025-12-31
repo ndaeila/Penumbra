@@ -1,0 +1,13 @@
+# AI Gateway - Integrated LiteLLM + Langfuse
+# This compose file integrates both services on a shared network
+
+include:
+  - ./langfuse/langfuse-compose.yml
+  - ./litellm/litellm-compose.yml
+
+# Define shared network for cross-service communication
+networks:
+  default:
+    name: ai-gateway
+    driver: bridge
+
