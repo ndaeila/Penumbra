@@ -1,9 +1,12 @@
 model_list:
-  - model_name: anthropic/claude-haiku-4-5
+  - model_name: claude-haiku-4-5
     litellm_params:
       model: anthropic/claude-haiku-4-5
-      api_key: os.environ/ANTHROPIC_API_KEY # runs os.getenv("ANTHROPIC_API_KEY")
-      api_base: https://api.anthropic.com/v1
+      api_key: os.environ/ANTHROPIC_API_KEY
+  - model_name: claude-sonnet-4
+    litellm_params:
+      model: anthropic/claude-sonnet-4-20250514
+      api_key: os.environ/ANTHROPIC_API_KEY
 
 general_settings:
   master_key: os.environ/LITELLM_MASTER_KEY  # Optional: set a master key for admin access

@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config(); 
 
-import { extractSearchResults } from './modules/serp-extractor/search';
+import { extractSearchResults } from '../modules/serp-extractor/search';
 
 async function main() {
     let questions = ['allintext:"Nicole daeila"', 'Nicole Daeila age', 'Nicole Daeila height'];

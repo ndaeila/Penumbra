@@ -1,5 +1,17 @@
 import type { AgentOptions, BrowserConnectorOptions } from 'magnitude-core';
 
+import dotenv from 'dotenv';
+dotenv.config();
+
+
+/**
+ * LiteLLM Gateway Configuration
+ * All LLM requests are routed through the local LiteLLM proxy for unified access and observability
+ */
+const LITELLM_BASE_URL = process.env.LITELLM_BASE_URL || 'http://localhost:4000';
+const LITELLM_API_KEY = process.env.LITELLM_API_KEY || process.env.LITELLM_MASTER_KEY;
+const DEFAULT_MODEL = process.env.LITELLM_DEFAULT_MODEL || 'claude-haiku-4-5';
+
 /**
  * Custom options for Magnitude Agent instances
  */
@@ -7,10 +19,7 @@ export type MagnitudeAgentConfig = {
     startingUrl?: string;
     narrate?: boolean;
     prompt?: string;
-    apiKey?: string;
     model?: string;
-    provider?: 'anthropic' | 'openai' | 'openai-generic';
-    baseUrl?: string;
 }
 
 /**
@@ -33,28 +42,25 @@ export function createBrowserConnectorOptions(
 }
 
 /**
- * Creates AgentOptions with pre-vetted defaults that can be overridden
- * API key will be read from ANTHROPIC_API_KEY environment variable if not provided
+ * Creates AgentOptions configured to use LiteLLM gateway
+ * Requires LITELLM_API_KEY or LITELLM_MASTER_KEY environment variable
  */
 export function createAgentOptions(
     config?: Partial<MagnitudeAgentConfig>
 ): AgentOptions {
-    // Get API key from config or environment variable
-    const apiKey = config?.apiKey || process.env.ANTHROPIC_API_KEY;
-    
-    if (!apiKey) {
+    if (!LITELLM_API_KEY) {
         throw new Error(
-            'Anthropic API key not found. Please set ANTHROPIC_API_KEY environment variable or provide apiKey in config.'
+            'LiteLLM API key not found. Please set LITELLM_API_KEY or LITELLM_MASTER_KEY environment variable.'
         );
     }
 
     return {
         llm: {
-            provider: config?.provider || 'anthropic',
+            provider: 'openai-generic',
             options: {
-                apiKey,
-                model: config?.model || 'claude-haiku-4-5',
-                baseUrl: config?.baseUrl || undefined,
+                baseUrl: LITELLM_BASE_URL,
+                apiKey: LITELLM_API_KEY,
+                model: config?.model || DEFAULT_MODEL,
             }
         },
         prompt: config?.prompt || DEFAULT_PROMPT,

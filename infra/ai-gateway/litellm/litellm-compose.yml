@@ -6,10 +6,10 @@ services:
         target: runtime
     image: ghcr.io/berriai/litellm:main-stable
     volumes:
-      - ./litellm/litellm_config.yaml:/app/config.yaml
+      - ./litellm/config:/app/config
       - ~/.certs:/app/certs
     command:
-      - "--config=/app/config.yaml"
+      - "--config=/app/config/litellm_config.yaml"
     ports:
       - "4000:4000" # Map the container port to the host, change the host port if necessary
     environment:

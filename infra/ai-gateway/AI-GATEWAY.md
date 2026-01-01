@@ -43,6 +43,7 @@ Point your applications to the LiteLLM proxy. It will automatically route to the
 
 ```bash
 curl -X POST http://localhost:4000/v1/chat/completions \
+  -H "Content-Type: application/json" \
   -H "Authorization: Bearer <LITELLM_MASTER_KEY>" \
   -d '{
     "model": "anthropic/claude-haiku-4-5",
